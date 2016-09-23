@@ -2,9 +2,6 @@
 
   // File for handling file uploads
 
-  var_dump($_FILES);
-  var_dump($_POST);
-
   // Do some auth shit
 
   $error = array(
@@ -14,7 +11,7 @@
 
   if ($_FILES['bmp-tar']['type'] != "application/x-gzip") {
     $error['error'] = true;
-    array_push($error['msg'], "Upload of incorrect MIME type, Uploads must be GNU zip archives.");
+    array_push($error['msg'], "Upload of incorrect MIME type, Uploads must be gzip archives.");
   }
   if ($_FILES['size'] === 0 || $_FILES['size'] > 5000000) {
     $error['error'] = true;
@@ -32,8 +29,22 @@
 
     move_uploaded_file($_FILES['bmp-tar']['tmp_name'], "map.tar.gz");
 
+    $return = shell_exec('tar -xvzf map.tar.gz 2>&1'); // Search return for some error?
 
-    header('location: ../index.php');
+    $files = scandir('../temp');
+    echo '<pre>';
+    foreach ($files as $file) {
+      if (preg_match('/.php/', $file) || preg_match('/.bmp/', $file)) {
+        if (preg_match('/.bmp/', $file)) {
+          $return = shell_exec('mv ' . $file . ' ../bmp-processing');
+        }
+      } else {
+        if (is_file($file)) {
+          unlink($file);
+        }
+      }
+    }
+    require_once '../bmp-processing/process.php';
   }
 
 ?>
