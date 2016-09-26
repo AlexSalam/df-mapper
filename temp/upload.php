@@ -44,7 +44,8 @@
         }
       }
     }
-    require_once '../bmp-processing/process.php';
+    require_once '../class_bmp-process.php';
+
   }
 
 ?>
