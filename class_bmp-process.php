@@ -3,15 +3,35 @@
   class bmpProcessor
   {
 
-    function __construct($worldname, $lowLvl, $highLvl) {
+    function __construct($lowLvl, $highLvl) {
 
-      $this->worldName = $worldName;
       $this->lowLvl = $lowLvl;
       $this->highLvl = $highLvl;
 
+      // tiles are 16x24px chunks
+
+      $map = array();
+
+      for ($i=$lowLvl; $i < $highLvl; $i++) {
+        array_push($map, array());
+      }
+
     }
 
-    function readBMP() {
+    function processBmpIntoArray($img) {
+
+      // Take a bmp image resource object and process it into a 144x144 2d array of 'tiles', tiles are 16x24 chunks
+      // Some size detected
+
+      if (imagesx($img) % 16 !== 0 || imagesy($img) % 24 !== 0) {
+        return 'Layer does not fit expected dimensions';
+      }
+
+      
+
+    }
+
+    function readBMP($p_sFile) {
 
           //    Load the image into a string - I didn't steal this I swear master
           $file    =    fopen($p_sFile,"rb");
@@ -105,8 +125,5 @@
       }
 
     }
-
-  }
-
 
 ?>
