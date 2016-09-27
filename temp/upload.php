@@ -79,17 +79,22 @@
 
     $BMP = new bmpProcessor($min, $max);
 
-    echo '<pre>';
+    //echo '<pre>';
     set_time_limit('300');
-    var_dump($BMP->readBMP($BMP->lowLvl . '.bmp'));
+    ini_set('memory_limit','512M');
+    //var_dump($BMP->readBMP($BMP->lowLvl . '.bmp'));
     $count = 0;
 
     for ($i=$BMP->lowLvl; $i < $BMP->highLvl; $i++) {
 
-      $BMP->$map[$count] = $BMP->processBmpIntoArray($BMP->readBMP($BMP[$i]));
+      echo (string) $i . '.bmp';
+      $BMP->map[$i] = $BMP->processBmpIntoArray($BMP->readBMP((string) $i . '.bmp'));
       $count++;
 
     }
+
+    echo '<pre>';
+    var_dump($BMP->map);
 
   }
 

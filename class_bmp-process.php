@@ -10,24 +10,57 @@
 
       // tiles are 16x24px chunks
 
-      $map = array();
-
-      for ($i=$lowLvl; $i < $highLvl; $i++) {
-        array_push($map, array());
-      }
+      $this->map = array();
 
     }
 
     function processBmpIntoArray($img) {
 
-      // Take a bmp image resource object and process it into a 144x144 2d array of 'tiles', tiles are 16x24 chunks
+      // Take a bmp image resource object and process it into a 144x144 2d array of 'tiles', tiles are 16x24 chunks represented as a string?
       // Some size detected
+      // make use of imagecopy, imagecreatetruecolor, imagecolorat
 
       if (imagesx($img) % 16 !== 0 || imagesy($img) % 24 !== 0) {
         return 'Layer does not fit expected dimensions';
       }
 
-      
+      // if here image is determined as fitting with a 144x144 grid 20736 tiles each with 384 pixels
+
+      // imagejpeg($img, 'test.jpg'); //Check image is correct, is correct
+      // die;
+
+      $grid = array();
+
+      for ($y=0; $y < 144; $y++) {
+
+        $xgrid = array();
+        for ($x=0; $x < 144; $x++) {
+
+
+          $string = '';
+          // collect all 16x24 pixel data into $string
+          $xstart = $x * 16;
+          $ystart = $y * 24;
+
+          for ($ty=0; $ty < 24; $ty++) {
+
+            for ($tx=0; $tx < 16; $tx++) {
+
+              $string .= imagecolorat($img, $xstart + $tx, $ystart + $ty);
+
+            }
+
+          }
+
+          array_push($xgrid, $string);
+
+        }
+
+        array_push($grid, $xgrid);
+
+      }
+
+      return $grid;
 
     }
 
